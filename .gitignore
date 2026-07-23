@@ -1,0 +1,14 @@
+# Entorno virtual (cada quien crea el suyo, no se comparte)
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Variables de entorno con contraseñas: nunca se sube
+.env
+
+# Base de datos local antigua (SQLite), ya no se usa
+db.sqlite3
+
+# Archivos de media subidos por usuarios
+media/

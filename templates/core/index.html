@@ -1,0 +1,140 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Estancia — hospédate, arrienda o compra{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="wrap hero-grid">
+
+    <div class="hero-copy">
+      <p class="eyebrow">Hospedaje · Arriendo · Venta</p>
+      <h1 class="hero-title">Un techo para cada plan,<br>en un solo catálogo.</h1>
+      <p class="hero-sub">Reserva una noche, firma un arriendo de temporada o encuentra la propiedad que vas a comprar — todo con los mismos anfitriones y agentes verificados.</p>
+
+      <form class="search-card" action="#" method="get">
+        <div class="search-field field-lugar">
+          <label for="ciudad">Destino</label>
+          <input type="text" id="ciudad" name="ciudad" placeholder="Quito, Cuenca, Manta…">
+        </div>
+        <div class="search-divider" aria-hidden="true"></div>
+        <div class="search-field field-fecha">
+          <label for="entrada">Llegada</label>
+          <input type="text" id="entrada" name="fecha_entrada" placeholder="Añade fecha">
+        </div>
+        <div class="search-divider" aria-hidden="true"></div>
+        <div class="search-field field-fecha">
+          <label for="salida">Salida</label>
+          <input type="text" id="salida" name="fecha_salida" placeholder="Añade fecha">
+        </div>
+        <div class="search-divider" aria-hidden="true"></div>
+        <div class="search-field field-huespedes">
+          <label for="huespedes">Huéspedes</label>
+          <input type="text" id="huespedes" name="num_huespedes" placeholder="¿Cuántos?">
+        </div>
+        <button type="submit" class="search-submit" aria-label="Buscar propiedades">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <div class="hero-mosaic" aria-hidden="true">
+      <div class="postcard pc-1">
+        <svg viewBox="0 0 100 60" class="pc-art"><path d="M0 45 L18 20 L30 34 L45 12 L62 38 L78 24 L100 45 Z"/></svg>
+        <span class="pc-tag">Quito</span>
+      </div>
+      <div class="postcard pc-2">
+        <svg viewBox="0 0 100 60" class="pc-art"><rect x="10" y="18" width="12" height="32"/><rect x="26" y="8" width="14" height="42"/><rect x="44" y="24" width="10" height="26"/><rect x="58" y="14" width="16" height="36"/></svg>
+        <span class="pc-tag">Cuenca</span>
+      </div>
+      <div class="postcard pc-3">
+        <svg viewBox="0 0 100 60" class="pc-art"><path d="M0 40 Q15 30 30 40 T60 40 T100 40" fill="none" stroke-width="4"/><path d="M0 50 Q15 40 30 50 T60 50 T100 50" fill="none" stroke-width="4"/></svg>
+        <span class="pc-tag">Manta</span>
+      </div>
+      <div class="postcard pc-4">
+        <svg viewBox="0 0 100 60" class="pc-art"><circle cx="50" cy="30" r="16"/></svg>
+        <span class="pc-tag">Baños</span>
+      </div>
+      <div class="stamp-badge">
+        <span>3 modalidades</span>
+        <span class="stamp-line">una sola búsqueda</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="modalidades">
+  <div class="wrap tabs-row">
+    <button class="tab-ticket is-active" type="button" data-modalidad="hospedaje">
+      <span class="tab-index">01</span>
+      <span class="tab-label">Hospedaje</span>
+      <span class="tab-detail">por noche</span>
+    </button>
+    <button class="tab-ticket" type="button" data-modalidad="arriendo">
+      <span class="tab-index">02</span>
+      <span class="tab-label">Arriendo</span>
+      <span class="tab-detail">por mes</span>
+    </button>
+    <button class="tab-ticket" type="button" data-modalidad="venta">
+      <span class="tab-index">03</span>
+      <span class="tab-label">Venta</span>
+      <span class="tab-detail">precio total</span>
+    </button>
+  </div>
+</section>
+
+<section class="listado">
+  <div class="wrap">
+    <div class="listado-head">
+      <h2>Propiedades destacadas</h2>
+      <div class="chip-row">
+        <button class="chip is-active" type="button">Todas</button>
+        <button class="chip" type="button">Casa</button>
+        <button class="chip" type="button">Departamento</button>
+        <button class="chip" type="button">Cabaña</button>
+        <button class="chip" type="button">Habitación</button>
+      </div>
+    </div>
+
+    <div class="property-grid">
+      {% for propiedad in propiedades %}
+      <article class="property-card">
+        <div class="card-media {% cycle 'media-a' 'media-b' 'media-c' 'media-d' 'media-e' 'media-f' %}">
+          {% with foto=propiedad.foto_principal %}
+            {% if foto %}<img src="{{ foto.imagen.url }}" alt="{{ propiedad.titulo }}">{% endif %}
+          {% endwith %}
+          <span class="badge badge-{{ propiedad.modalidad }}">{{ propiedad.get_modalidad_display }}</span>
+          <button class="fav-btn" type="button" aria-label="Guardar en favoritos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9Z"/></svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <h3>{{ propiedad.titulo }}</h3>
+            {% if propiedad.calificacion_promedio %}
+              <span class="rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z"/></svg>{{ propiedad.calificacion_promedio }}</span>
+            {% else %}
+              <span class="rating rating-new">Nuevo</span>
+            {% endif %}
+          </div>
+          <p class="card-meta">
+            {{ propiedad.ciudad }}
+            {% if propiedad.capacidad_personas %} · {{ propiedad.capacidad_personas }} huéspedes{% endif %}
+            {% if propiedad.habitaciones %} · {{ propiedad.habitaciones }} habitaciones{% endif %}
+          </p>
+          <p class="card-price"><span class="price">${{ propiedad.precio|floatformat:0 }}</span> {{ propiedad.get_unidad_precio_display }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <div class="empty-state">
+        <p class="empty-title">Todavía no hay propiedades publicadas</p>
+        <p class="empty-text">Agrega la primera desde el panel de administración en <code>/admin/</code>.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
