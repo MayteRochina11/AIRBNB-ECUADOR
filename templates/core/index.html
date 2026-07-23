@@ -111,8 +111,10 @@
             {% if foto %}<img src="{{ foto.imagen.url }}" alt="{{ propiedad.titulo }}">{% endif %}
           {% endwith %}
           <span class="badge badge-{{ propiedad.modalidad }}">{{ propiedad.get_modalidad_display }}</span>
-          <button class="fav-btn" type="button" aria-label="Guardar en favoritos">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9Z"/></svg>
+          <button class="fav-btn" type="button" data-propiedad-id="{{ propiedad.id }}" aria-label="Guardar en favoritos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9Z"/>
+            </svg>
           </button>
         </div>
         <div class="card-body">
@@ -141,5 +143,25 @@
     </div>
   </div>
 </section>
-
+<script>
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const propId = this.dataset.propiedadId;
+      fetch(`/favorito/${propId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.favorito === true) {
+          this.querySelector('svg').style.fill = 'var(--clay)';
+        } else {
+          this.querySelector('svg').style.fill = 'none';
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

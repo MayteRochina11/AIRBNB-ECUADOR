@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Agentes — Estancia{% endblock %}
+
+{% block content %}
+<section class="hero-small wrap">
+  <h1 class="page-title">Propiedades gestionadas por agentes</h1>
+  <p class="page-sub">Encuentra las mejores oportunidades de venta y arriendo con agentes profesionales certificados.</p>
+</section>
+
+<section class="listado wrap">
+  <div class="listado-head">
+    <h2>Propiedades con agente</h2>
+  </div>
+
+  <div class="property-grid">
+    {% for propiedad in propiedades %}
+    <article class="property-card">
+      <div class="card-media {% cycle 'media-a' 'media-b' 'media-c' 'media-d' 'media-e' 'media-f' %}">
+        {% with foto=propiedad.foto_principal %}
+          {% if foto %}<img src="{{ foto.url_foto.url }}" alt="{{ propiedad.titulo }}">{% endif %}
+        {% endwith %}
+        <span class="badge badge-{{ propiedad.modalidad }}">{{ propiedad.get_modalidad_display }}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title-row">
+          <h3>{{ propiedad.titulo }}</h3>
+          {% if propiedad.calificacion_promedio %}
+            <span class="rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z"/></svg>{{ propiedad.calificacion_promedio }}</span>
+          {% else %}
+            <span class="rating rating-new">Nuevo</span>
+          {% endif %}
+        </div>
+        <p class="card-meta">{{ propiedad.ciudad }} · {{ propiedad.get_tipo_propiedad_display }}</p>
+        <p class="card-price"><span class="price">${{ propiedad.precio|floatformat:0 }}</span> {{ propiedad.get_unidad_precio_display }}</p>
+      </div>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+      <p class="empty-title">No hay propiedades gestionadas por agentes aún</p>
+      <p class="empty-text">Los agentes pueden asignarse a propiedades desde el panel de administración.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .hero-small { padding: 40px 0 20px; }
+  .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; margin: 0; }
+  .page-sub { font-size: 16px; color: var(--ink-soft); margin: 6px 0 0; }
+</style>
+{% endblock %}

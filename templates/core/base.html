@@ -26,10 +26,10 @@
     </a>
 
     <nav class="main-nav" aria-label="Navegación principal">
-      <a href="#" class="nav-link is-active">Explorar</a>
-      <a href="#" class="nav-link">Anfitriones</a>
-      <a href="#" class="nav-link">Agentes</a>
-      <a href="#" class="nav-link">Ayuda</a>
+      <a href="{% url 'core:inicio' %}" class="nav-link {% if request.path == '/' %}is-active{% endif %}">Explorar</a>
+      <a href="{% url 'core:anfitriones' %}" class="nav-link {% if request.path == '/anfitriones/' %}is-active{% endif %}">Anfitriones</a>
+      <a href="{% url 'core:agentes' %}" class="nav-link {% if request.path == '/agentes/' %}is-active{% endif %}">Agentes</a>
+      <a href="{% url 'core:ayuda' %}" class="nav-link {% if request.path == '/ayuda/' %}is-active{% endif %}">Ayuda</a>
     </nav>
 
     <div class="header-actions">
@@ -72,25 +72,25 @@
     <div class="footer-col">
       <p class="footer-heading">Modalidades</p>
       <ul class="footer-list">
-        <li><a href="#">Hospedaje</a></li>
-        <li><a href="#">Arriendo</a></li>
-        <li><a href="#">Venta</a></li>
+        <li><a href="{% url 'core:hospedaje' %}">Hospedaje</a></li>
+        <li><a href="{% url 'core:arriendo' %}">Arriendo</a></li>
+        <li><a href="{% url 'core:venta' %}">Venta</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <p class="footer-heading">Anfitriones</p>
       <ul class="footer-list">
-        <li><a href="#">Publica una propiedad</a></li>
-        <li><a href="#">Recursos para agentes</a></li>
-        <li><a href="#">Comisiones</a></li>
+        <li><a href="{% url 'core:publicar' %}">Publica una propiedad</a></li>
+        <li><a href="{% url 'core:anfitriones' %}">Recursos para anfitriones</a></li>
+        <li><a href="{% url 'core:agentes' %}">Comisiones</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <p class="footer-heading">Soporte</p>
       <ul class="footer-list">
-        <li><a href="#">Centro de ayuda</a></li>
-        <li><a href="#">Confianza y seguridad</a></li>
-        <li><a href="#">Contacto</a></li>
+        <li><a href="{% url 'core:ayuda' %}">Centro de ayuda</a></li>
+        <li><a href="{% url 'core:confianza' %}">Confianza y seguridad</a></li>
+        <li><a href="{% url 'core:contacto' %}">Contacto</a></li>
       </ul>
     </div>
   </div>
@@ -98,6 +98,10 @@
     <span>© {% now "Y" %} Estancia</span>
     <span class="footer-dot">·</span>
     <span>Ecuador · Colombia · Perú · México</span>
+    <span class="footer-dot">·</span>
+    <span>Desarrollado por <strong>JAMJIN</strong></span>
+    <span class="footer-dot">·</span>
+    <a href="https://github.com/MayteRochina11" target="_blank" class="footer-link">GitHub</a>
   </div>
 </footer>
 

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
 from .models import Propiedad
-
+from .models import Usuario, Propiedad 
 
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
@@ -16,7 +16,7 @@ class RegistroForm(StyledFormMixin, UserCreationForm):
     email = forms.EmailField(required=True, label='Correo electrónico')
 
     class Meta:
-        model = User
+        model = Usuario 
         fields = ('username', 'email', 'password1', 'password2')
         labels = {'username': 'Usuario'}
 

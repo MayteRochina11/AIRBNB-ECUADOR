@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Contacto — Estancia{% endblock %}
+
+{% block content %}
+<section class="hero-small wrap">
+  <h1 class="page-title">Contáctanos</h1>
+  <p class="page-sub">Estamos aquí para escucharte y ayudarte.</p>
+</section>
+
+<section class="content-section wrap">
+  <div class="contact-grid">
+    
+    <div class="contact-card">
+      <div class="contact-icon">📧</div>
+      <h3>Correo electrónico</h3>
+      <p><a href="mailto:soporte@estancia.com">soporte@estancia.com</a></p>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-icon">💬</div>
+      <h3>Chat en vivo</h3>
+      <p>Disponible de lunes a viernes, 9:00 AM - 6:00 PM (GMT-5)</p>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-icon">📱</div>
+      <h3>Redes sociales</h3>
+      <p>Síguenos en <strong>@EstanciaLatam</strong> para novedades y ofertas.</p>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-icon">🌐</div>
+      <h3>Desarrolladores</h3>
+      <p>Equipo <strong>JAMJIN</strong> | <a href="https://github.com/MayteRochina11" target="_blank">GitHub</a></p>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .hero-small { padding: 40px 0 20px; }
+  .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; margin: 0; }
+  .page-sub { font-size: 16px; color: var(--ink-soft); margin: 6px 0 0; }
+  .content-section { padding: 20px 0 80px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 30px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-soft);
+  }
+  .contact-icon { font-size: 40px; margin-bottom: 12px; }
+  .contact-card h3 { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+  .contact-card p { font-size: 14.5px; color: var(--ink-soft); margin: 0; }
+  .contact-card a { color: var(--brass-dark); font-weight: 600; }
+  .contact-card a:hover { color: var(--ink); text-decoration: underline; }
+</style>
+{% endblock %}

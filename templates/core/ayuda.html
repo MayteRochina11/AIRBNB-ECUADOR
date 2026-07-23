@@ -1,0 +1,121 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Ayuda y tutorial — Estancia{% endblock %}
+
+{% block content %}
+<section class="hero-small wrap">
+  <h1 class="page-title">¿Cómo funciona Estancia?</h1>
+  <p class="page-sub">Una guía rápida para que saques el máximo provecho a nuestra plataforma.</p>
+</section>
+
+<section class="tutorial-grid wrap">
+  
+  <!-- Tarjeta 1 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">01</div>
+    <h2>Regístrate o inicia sesión</h2>
+    <p>Haz clic en <strong>"Regístrate"</strong> en la esquina superior derecha. Crea tu cuenta con un nombre de usuario, correo y contraseña. Si ya tienes cuenta, usa <strong>"Inicia sesión"</strong>.</p>
+    <div class="tutorial-icon">👤</div>
+  </div>
+
+  <!-- Tarjeta 2 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">02</div>
+    <h2>Explora propiedades</h2>
+    <p>Usa la barra de búsqueda en el inicio. Filtra por <strong>ciudad</strong>, <strong>modalidad</strong> (Hospedaje, Arriendo, Venta) o el <strong>tipo de propiedad</strong> (Casa, Departamento, Cabaña).</p>
+    <div class="tutorial-icon">🔍</div>
+  </div>
+
+  <!-- Tarjeta 3 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">03</div>
+    <h2>Guarda tus favoritos</h2>
+    <p>Cuando veas una propiedad que te guste, haz clic en el <strong>corazón</strong> que aparece en la esquina superior derecha de su imagen. Se guardará en tu lista de favoritos.</p>
+    <div class="tutorial-icon">❤️</div>
+  </div>
+
+  <!-- Tarjeta 4 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">04</div>
+    <h2>Publica tu propiedad</h2>
+    <p>Si eres propietario, haz clic en <strong>"Publica tu propiedad"</strong>. Llena el formulario con los datos, sube fotos (la primera será la principal) y publica. Aparecerá en el catálogo automáticamente.</p>
+    <div class="tutorial-icon">📝</div>
+  </div>
+
+  <!-- Tarjeta 5 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">05</div>
+    <h2>Conecta con un agente</h2>
+    <p>Si quieres vender o arrendar con ayuda profesional, busca propiedades en la sección <strong>"Agentes"</strong> del menú. Ahí verás propiedades gestionadas por agentes certificados.</p>
+    <div class="tutorial-icon">🤝</div>
+  </div>
+
+  <!-- Tarjeta 6 -->
+  <div class="tutorial-card">
+    <div class="tutorial-number">06</div>
+    <h2>Soporte y contacto</h2>
+    <p>¿Tienes dudas o problemas? Visita nuestro Centro de Ayuda o contáctanos directamente. Estamos aquí para hacer tu experiencia fácil y segura.</p>
+    <div class="tutorial-icon">💬</div>
+  </div>
+
+</section>
+
+<style>
+  /* Estilos para la página de ayuda */
+  .hero-small { padding: 40px 0 20px; }
+  .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; margin: 0; }
+  .page-sub { font-size: 16px; color: var(--ink-soft); margin: 6px 0 0; }
+
+  .tutorial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 0 80px;
+  }
+
+  .tutorial-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 30px 24px;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.2s ease;
+  }
+
+  .tutorial-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .tutorial-number {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--brass-dark);
+    margin-bottom: 8px;
+  }
+
+  .tutorial-card h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .tutorial-card p {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .tutorial-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 32px;
+    opacity: 0.3;
+  }
+</style>
+{% endblock %}

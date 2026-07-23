@@ -1,0 +1,50 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Confianza y seguridad — Estancia{% endblock %}
+
+{% block content %}
+<section class="hero-small wrap">
+  <h1 class="page-title">Confianza y seguridad</h1>
+  <p class="page-sub">Tu tranquilidad es nuestra prioridad.</p>
+</section>
+
+<section class="content-section wrap">
+  <div class="info-card">
+    <h2>✅ Anfitriones y agentes verificados</h2>
+    <p>Todos los propietarios y agentes pasan por un proceso de verificación de identidad y licencias profesionales.</p>
+  </div>
+
+  <div class="info-card">
+    <h2>🔒 Pagos seguros</h2>
+    <p>Todas las transacciones y pagos se procesan a través de pasarelas de pago seguras, protegiendo tu información financiera.</p>
+  </div>
+
+  <div class="info-card">
+    <h2>🛡️ Protección al usuario</h2>
+    <p>Contamos con un sistema de reseñas y calificaciones que garantiza la transparencia y calidad de todas las propiedades publicadas.</p>
+  </div>
+
+  <div class="info-card">
+    <h2>📞 Soporte 24/7</h2>
+    <p>Nuestro equipo de soporte está disponible para ayudarte con cualquier duda o problema que tengas durante tu experiencia.</p>
+  </div>
+</section>
+
+<style>
+  .hero-small { padding: 40px 0 20px; }
+  .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; margin: 0; }
+  .page-sub { font-size: 16px; color: var(--ink-soft); margin: 6px 0 0; }
+  .content-section { padding: 20px 0 80px; }
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 24px 30px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-soft);
+  }
+  .info-card h2 { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .info-card p { font-size: 15px; color: var(--ink-soft); margin: 0; line-height: 1.6; }
+</style>
+{% endblock %}

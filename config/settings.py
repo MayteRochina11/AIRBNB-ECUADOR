@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'BD_AIRBNB'),
+        'NAME': os.environ.get('DB_NAME', 'bd_airbnb'),
         'USER': os.environ.get('DB_USER', 'postgres'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
@@ -136,3 +136,4 @@ LOGOUT_REDIRECT_URL = 'core:inicio'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = '.'
 DECIMAL_SEPARATOR = ','
+AUTH_USER_MODEL = 'core.Usuario' 

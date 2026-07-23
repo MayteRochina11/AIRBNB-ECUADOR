@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Propiedad, FotoPropiedad, Resena
+from .models import (
+    Usuario, Agente, Propiedad, FotoPropiedad, Amenidad, 
+    PropiedadAmenidad, Disponibilidad, ReservaHospedaje, 
+    ContratoArriendo, ProcesoVenta, OfertaCompra, Documento, 
+    Pago, Resena
+)
 
 
 class FotoPropiedadInline(admin.TabularInline):
@@ -29,3 +34,22 @@ class FotoPropiedadAdmin(admin.ModelAdmin):
 class ResenaAdmin(admin.ModelAdmin):
     list_display = ('propiedad', 'autor', 'calificacion', 'fecha')
     list_filter = ('calificacion',)
+
+
+# Registra los demás modelos para que aparezcan en el admin
+@admin.register(Usuario)
+class UsuarioAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'rol', 'verificado')
+    list_filter = ('rol', 'verificado')
+
+
+admin.site.register(Agente)
+admin.site.register(Amenidad)
+admin.site.register(PropiedadAmenidad)
+admin.site.register(Disponibilidad)
+admin.site.register(ReservaHospedaje)
+admin.site.register(ContratoArriendo)
+admin.site.register(ProcesoVenta)
+admin.site.register(OfertaCompra)
+admin.site.register(Documento)
+admin.site.register(Pago)
