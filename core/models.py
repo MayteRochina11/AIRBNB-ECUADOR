@@ -48,6 +48,7 @@ class Agente(models.Model):
         ('ambos', 'Ambos'),
     )
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='agente')
+    nombre = models.CharField(max_length=150, blank=True)
     licencia = models.CharField(max_length=100, blank=True, null=True)
     especialidad = models.CharField(max_length=20, choices=ESPECIALIDADES, default='ambos')
     comision_porcentaje = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
@@ -57,8 +58,39 @@ class Agente(models.Model):
         verbose_name = 'Agente'
         verbose_name_plural = 'Agentes'
 
+    def save(self, *args, **kwargs):
+        # Copia el nombre del usuario para que se vea directo en la tabla
+        if not self.nombre and self.usuario_id:
+            self.nombre = self.usuario.first_name or self.usuario.username
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f'Agente: {self.usuario.username}'
+        return f'Agente: {self.nombre or self.usuario.username}'
+
+
+# =========================================================
+# 2.5. ANFITRIONES
+# =========================================================
+class Anfitrion(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='anfitrion')
+    nombre = models.CharField(max_length=150, blank=True)
+    biografia = models.TextField(blank=True)
+    propiedades_activas = models.PositiveIntegerField(default=0)
+    superhost = models.BooleanField(default=False)
+    fecha_registro = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Anfitrión'
+        verbose_name_plural = 'Anfitriones'
+
+    def save(self, *args, **kwargs):
+        # Copia el nombre del usuario para que se vea directo en la tabla
+        if not self.nombre and self.usuario_id:
+            self.nombre = self.usuario.first_name or self.usuario.username
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Anfitrión: {self.nombre or self.usuario.username}'
 
 
 # =========================================================

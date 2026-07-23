@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Usuario, Propiedad, Agente, ReservaHospedaje
+from .models import Usuario, Propiedad, Agente, Anfitrion, ReservaHospedaje
 
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
@@ -34,9 +34,11 @@ class RegistroForm(StyledFormMixin, UserCreationForm):
         usuario.rol = self.cleaned_data['rol']
         if commit:
             usuario.save()
-            # Si se registra como agente, se le crea su perfil de agente
+            # Se crea el perfil correspondiente según el rol elegido
             if usuario.rol == 'agente':
                 Agente.objects.get_or_create(usuario=usuario)
+            elif usuario.rol == 'host':
+                Anfitrion.objects.get_or_create(usuario=usuario)
         return usuario
 
 

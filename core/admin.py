@@ -1,8 +1,8 @@
 from django.contrib import admin
 from .models import (
-    Usuario, Agente, Propiedad, FotoPropiedad, Amenidad, 
-    PropiedadAmenidad, Disponibilidad, ReservaHospedaje, 
-    ContratoArriendo, ProcesoVenta, OfertaCompra, Documento, 
+    Usuario, Agente, Anfitrion, Propiedad, FotoPropiedad, Amenidad,
+    PropiedadAmenidad, Disponibilidad, ReservaHospedaje,
+    ContratoArriendo, ProcesoVenta, OfertaCompra, Documento,
     Pago, Resena
 )
 
@@ -44,6 +44,7 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Agente)
+admin.site.register(Anfitrion)
 admin.site.register(Amenidad)
 admin.site.register(PropiedadAmenidad)
 admin.site.register(Disponibilidad)
