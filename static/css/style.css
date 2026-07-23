@@ -112,6 +112,97 @@ input:focus-visible{
   box-shadow:var(--shadow-soft);
 }
 .user-pill:hover{ border-color:var(--ink-soft); }
+.user-name{ font-size:13.5px; font-weight:600; padding-right:2px; }
+.logout-form{ display:inline-flex; }
+.link-logout{
+  background:none; border:none;
+  font-family:inherit; font-size:14px; font-weight:600;
+  color:var(--ink-soft);
+}
+.link-logout:hover{ color:var(--clay); }
+
+/* ==========================================================================
+   Mensajes (Django messages)
+   ========================================================================== */
+.messages-wrap{ padding-top:18px; }
+.alert{
+  padding:12px 18px;
+  border-radius:var(--radius-sm);
+  font-size:14px;
+  margin-bottom:10px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--ink);
+}
+.alert-success{ background:rgba(67,94,80,.1); border-color:rgba(67,94,80,.3); color:var(--moss); }
+.alert-error{ background:rgba(167,93,63,.1); border-color:rgba(167,93,63,.3); color:var(--clay); }
+.alert-warning{ background:rgba(192,138,62,.1); border-color:rgba(192,138,62,.3); color:var(--brass-dark); }
+
+/* ==========================================================================
+   Formularios (login, registro, publicar propiedad)
+   ========================================================================== */
+.auth-section{ padding:64px 0 90px; display:flex; justify-content:center; }
+.auth-card{
+  width:100%; max-width:420px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lift);
+  padding:40px 36px;
+}
+.form-card{ max-width:680px; }
+.auth-title{
+  font-family:var(--font-display);
+  font-size:26px; font-weight:600;
+  margin:0 0 8px;
+}
+.auth-sub{ font-size:14px; color:var(--ink-soft); margin:0 0 28px; }
+.field-group{ margin-bottom:18px; }
+.field-group label{
+  display:block;
+  font-size:12px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.05em;
+  color:var(--moss);
+  margin-bottom:6px;
+}
+.field-input,
+.field-group select,
+.field-group textarea,
+.field-group input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:11px 14px;
+  font-family:var(--font-body);
+  font-size:14.5px;
+  color:var(--ink);
+  background:var(--paper);
+}
+.field-input:focus,
+.field-group select:focus,
+.field-group textarea:focus,
+.field-group input:focus{
+  outline:2px solid var(--brass-dark); outline-offset:1px;
+  border-color:var(--ink-soft);
+}
+.field-errors{ color:var(--clay); font-size:12.5px; margin-top:4px; }
+.field-help{ color:var(--ink-soft); font-size:12px; margin-top:4px; }
+.btn-primary{
+  width:100%;
+  border:none; border-radius:999px;
+  background:var(--brass-dark); color:#fff;
+  padding:13px 20px;
+  font-size:15px; font-weight:600;
+  transition:background .15s ease;
+}
+.btn-primary:hover{ background:var(--ink); }
+.auth-foot{ margin-top:22px; font-size:13.5px; color:var(--ink-soft); text-align:center; }
+.auth-foot a{ color:var(--brass-dark); font-weight:600; }
+.auth-foot a:hover{ color:var(--ink); }
+
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; }
+.form-grid .span-2{ grid-column:1/-1; }
+@media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } }
 
 /* ==========================================================================
    Hero

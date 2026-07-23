@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static core_extras %}
 
 {% block title %}Estancia — hospédate, arrienda o compra{% endblock %}
 
@@ -13,25 +13,25 @@
       <h1 class="hero-title">Un techo para cada plan,<br>en un solo catálogo.</h1>
       <p class="hero-sub">Reserva una noche, firma un arriendo de temporada o encuentra la propiedad que vas a comprar — todo con los mismos anfitriones y agentes verificados.</p>
 
-      <form class="search-card" action="#" method="get">
+      <form class="search-card" action="{% url 'core:inicio' %}" method="get">
         <div class="search-field field-lugar">
           <label for="ciudad">Destino</label>
-          <input type="text" id="ciudad" name="ciudad" placeholder="Quito, Cuenca, Manta…">
+          <input type="text" id="ciudad" name="ciudad" placeholder="Quito, Cuenca, Manta…" value="{{ request.GET.ciudad }}">
         </div>
         <div class="search-divider" aria-hidden="true"></div>
         <div class="search-field field-fecha">
           <label for="entrada">Llegada</label>
-          <input type="text" id="entrada" name="fecha_entrada" placeholder="Añade fecha">
+          <input type="text" id="entrada" name="fecha_entrada" placeholder="Añade fecha" title="Próximamente: aún no hay calendario de disponibilidad">
         </div>
         <div class="search-divider" aria-hidden="true"></div>
         <div class="search-field field-fecha">
           <label for="salida">Salida</label>
-          <input type="text" id="salida" name="fecha_salida" placeholder="Añade fecha">
+          <input type="text" id="salida" name="fecha_salida" placeholder="Añade fecha" title="Próximamente: aún no hay calendario de disponibilidad">
         </div>
         <div class="search-divider" aria-hidden="true"></div>
         <div class="search-field field-huespedes">
           <label for="huespedes">Huéspedes</label>
-          <input type="text" id="huespedes" name="num_huespedes" placeholder="¿Cuántos?">
+          <input type="number" min="1" id="huespedes" name="num_huespedes" placeholder="¿Cuántos?" value="{{ request.GET.num_huespedes }}">
         </div>
         <button type="submit" class="search-submit" aria-label="Buscar propiedades">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/></svg>
@@ -67,21 +67,26 @@
 
 <section class="modalidades">
   <div class="wrap tabs-row">
-    <button class="tab-ticket is-active" type="button" data-modalidad="hospedaje">
+    <a href="?{% query_transform modalidad=None %}" class="tab-ticket {% if not modalidad_actual %}is-active{% endif %}">
+      <span class="tab-index">00</span>
+      <span class="tab-label">Todas</span>
+      <span class="tab-detail">sin filtro</span>
+    </a>
+    <a href="?{% query_transform modalidad='hospedaje' %}" class="tab-ticket {% if modalidad_actual == 'hospedaje' %}is-active{% endif %}">
       <span class="tab-index">01</span>
       <span class="tab-label">Hospedaje</span>
       <span class="tab-detail">por noche</span>
-    </button>
-    <button class="tab-ticket" type="button" data-modalidad="arriendo">
+    </a>
+    <a href="?{% query_transform modalidad='arriendo' %}" class="tab-ticket {% if modalidad_actual == 'arriendo' %}is-active{% endif %}">
       <span class="tab-index">02</span>
       <span class="tab-label">Arriendo</span>
       <span class="tab-detail">por mes</span>
-    </button>
-    <button class="tab-ticket" type="button" data-modalidad="venta">
+    </a>
+    <a href="?{% query_transform modalidad='venta' %}" class="tab-ticket {% if modalidad_actual == 'venta' %}is-active{% endif %}">
       <span class="tab-index">03</span>
       <span class="tab-label">Venta</span>
       <span class="tab-detail">precio total</span>
-    </button>
+    </a>
   </div>
 </section>
 
@@ -90,11 +95,11 @@
     <div class="listado-head">
       <h2>Propiedades destacadas</h2>
       <div class="chip-row">
-        <button class="chip is-active" type="button">Todas</button>
-        <button class="chip" type="button">Casa</button>
-        <button class="chip" type="button">Departamento</button>
-        <button class="chip" type="button">Cabaña</button>
-        <button class="chip" type="button">Habitación</button>
+        <a href="?{% query_transform tipo_propiedad=None %}" class="chip {% if not tipo_actual %}is-active{% endif %}">Todas</a>
+        <a href="?{% query_transform tipo_propiedad='casa' %}" class="chip {% if tipo_actual == 'casa' %}is-active{% endif %}">Casa</a>
+        <a href="?{% query_transform tipo_propiedad='departamento' %}" class="chip {% if tipo_actual == 'departamento' %}is-active{% endif %}">Departamento</a>
+        <a href="?{% query_transform tipo_propiedad='cabana' %}" class="chip {% if tipo_actual == 'cabana' %}is-active{% endif %}">Cabaña</a>
+        <a href="?{% query_transform tipo_propiedad='habitacion' %}" class="chip {% if tipo_actual == 'habitacion' %}is-active{% endif %}">Habitación</a>
       </div>
     </div>
 

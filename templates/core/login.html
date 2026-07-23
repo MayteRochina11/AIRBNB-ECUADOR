@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block title %}Inicia sesión — Estancia{% endblock %}
+
+{% block content %}
+<section class="auth-section wrap">
+  <div class="auth-card">
+    <h1 class="auth-title">Inicia sesión</h1>
+    <p class="auth-sub">Entra para publicar y administrar tus propiedades.</p>
+
+    {% if form.non_field_errors %}
+      <p class="field-errors">{{ form.non_field_errors.0 }}</p>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn-primary">Entrar</button>
+    </form>
+
+    <p class="auth-foot">¿No tienes cuenta? <a href="{% url 'core:registro' %}">Regístrate</a></p>
+  </div>
+</section>
+{% endblock %}
