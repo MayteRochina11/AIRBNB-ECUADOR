@@ -1,6 +1,4 @@
-/* ==========================================================================
-   Estancia — design tokens
-   ========================================================================== */
+
 :root{
   --ink:        #16233A;
   --ink-soft:   #3C4A63;
@@ -50,7 +48,7 @@ button{ font-family:inherit; cursor:pointer; }
   *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
 }
 
-/* focus visibility */
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible{
@@ -58,9 +56,7 @@ input:focus-visible{
   outline-offset:2px;
 }
 
-/* ==========================================================================
-   Header
-   ========================================================================== */
+
 .site-header{
   position:sticky; top:0; z-index:40;
   background:rgba(250,247,241,.9);
@@ -121,9 +117,7 @@ input:focus-visible{
 }
 .link-logout:hover{ color:var(--clay); }
 
-/* ==========================================================================
-   Mensajes (Django messages)
-   ========================================================================== */
+
 .messages-wrap{ padding-top:18px; }
 .alert{
   padding:12px 18px;
@@ -138,9 +132,7 @@ input:focus-visible{
 .alert-error{ background:rgba(167,93,63,.1); border-color:rgba(167,93,63,.3); color:var(--clay); }
 .alert-warning{ background:rgba(192,138,62,.1); border-color:rgba(192,138,62,.3); color:var(--brass-dark); }
 
-/* ==========================================================================
-   Formularios (login, registro, publicar propiedad)
-   ========================================================================== */
+
 .auth-section{ padding:64px 0 90px; display:flex; justify-content:center; }
 .auth-card{
   width:100%; max-width:420px;
@@ -204,9 +196,7 @@ input:focus-visible{
 .form-grid .span-2{ grid-column:1/-1; }
 @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } }
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
+
 .hero{ padding:64px 0 40px; }
 .hero-grid{
   display:grid;
@@ -297,7 +287,7 @@ input:focus-visible{
   .search-submit{ margin-left:auto; }
 }
 
-/* --- hero mosaic --- */
+
 .hero-mosaic{
   position:relative;
   display:grid;
@@ -369,9 +359,7 @@ input:focus-visible{
   .stamp-badge{ display:none; }
 }
 
-/* ==========================================================================
-   Modalidad tickets  (signature element)
-   ========================================================================== */
+
 .modalidades{ padding:34px 0 6px; }
 .tabs-row{
   display:flex; gap:16px;
@@ -423,9 +411,7 @@ input:focus-visible{
   font-family:var(--font-mono);
 }
 
-/* ==========================================================================
-   Listing grid
-   ========================================================================== */
+
 .listado{ padding:46px 0 90px; }
 .listado-head{
   display:flex; align-items:center; justify-content:space-between;
@@ -561,9 +547,7 @@ input:focus-visible{
   font-size:15px;
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
+
 .site-footer{
   background:var(--ink);
   color:#D9D3C4;
@@ -599,7 +583,7 @@ input:focus-visible{
 @media (max-width: 760px){
   .footer-grid{ grid-template-columns:1fr 1fr; }
 }
-/* Botón "Ver detalles y reservar" en las tarjetas de propiedad */
+
 .ver-detalle{
   display:inline-flex; align-items:center; gap:6px;
   margin-top:12px;

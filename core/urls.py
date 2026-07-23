@@ -30,7 +30,6 @@ urlpatterns = [
     path('agentes/', views.agentes, name='agentes'),
     path('ayuda/', views.ayuda, name='ayuda'),
     
-    # --- NUEVAS URLS ---
     path('hospedaje/', views.hospedaje, name='hospedaje'),
     path('arriendo/', views.arriendo, name='arriendo'),
     path('venta/', views.venta, name='venta'),

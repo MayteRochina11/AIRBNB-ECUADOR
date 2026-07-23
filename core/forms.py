@@ -34,7 +34,6 @@ class RegistroForm(StyledFormMixin, UserCreationForm):
         usuario.rol = self.cleaned_data['rol']
         if commit:
             usuario.save()
-            # Se crea el perfil correspondiente según el rol elegido
             if usuario.rol == 'agente':
                 Agente.objects.get_or_create(usuario=usuario)
             elif usuario.rol == 'host':

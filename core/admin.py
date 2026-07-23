@@ -36,7 +36,6 @@ class ResenaAdmin(admin.ModelAdmin):
     list_filter = ('calificacion',)
 
 
-# Registra los demás modelos para que aparezcan en el admin
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'rol', 'verificado')

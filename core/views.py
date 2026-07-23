@@ -108,7 +108,6 @@ def ayuda(request):
     return render(request, 'core/ayuda.html')
 
 
-# --- NUEVAS VISTAS PARA LAS PÁGINAS INDEPENDIENTES ---
 
 def hospedaje(request):
     propiedades = Propiedad.objects.filter(activa=True, modalidad='hospedaje_corto').prefetch_related('fotos', 'resenas')
@@ -156,13 +155,12 @@ def detalle_propiedad(request, propiedad_id):
             reserva.propiedad = propiedad
             reserva.huesped = request.user
 
-            # Calcula el total según la unidad de precio de la propiedad
             dias = (reserva.fecha_salida - reserva.fecha_entrada).days
             if propiedad.unidad_precio == 'noche':
                 unidades = max(dias, 1)
             elif propiedad.unidad_precio == 'mes':
                 unidades = max(round(dias / 30), 1)
-            else:  # total (venta)
+            else:
                 unidades = 1
             reserva.precio_total = propiedad.precio * unidades
             reserva.save()
@@ -242,7 +240,6 @@ def eliminar_propiedad(request, propiedad_id):
         titulo = propiedad.titulo
         propiedad.delete()
         messages.success(request, f'La propiedad "{titulo}" fue eliminada.')
-        # El admin vuelve a su panel; el resto a sus propiedades
         if request.user.is_staff or request.user.is_superuser:
             return redirect('core:panel_admin')
         return redirect('core:mis_propiedades')

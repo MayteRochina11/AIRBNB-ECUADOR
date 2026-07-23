@@ -2,20 +2,16 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# =========================================================
-# 1. USUARIOS (extendiendo el User de Django)
-# =========================================================
 class Usuario(AbstractUser):
-    # Configuración especial para evitar el error E304 (conflicto con auth.User)
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='usuario_set',          # <-- Este nombre es el que Django quiere
+        related_name='usuario_set',
         related_query_name='usuario',
         blank=True
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='usuario_set',          # <-- Este nombre es el que Django quiere
+        related_name='usuario_set',
         related_query_name='usuario',
         blank=True
     )
@@ -38,9 +34,6 @@ class Usuario(AbstractUser):
         return f'{self.username} ({self.get_rol_display()})'
 
 
-# =========================================================
-# 2. AGENTES
-# =========================================================
 class Agente(models.Model):
     ESPECIALIDADES = (
         ('venta', 'Venta'),
@@ -59,7 +52,6 @@ class Agente(models.Model):
         verbose_name_plural = 'Agentes'
 
     def save(self, *args, **kwargs):
-        # Copia el nombre del usuario para que se vea directo en la tabla
         if not self.nombre and self.usuario_id:
             self.nombre = self.usuario.first_name or self.usuario.username
         super().save(*args, **kwargs)
@@ -68,9 +60,6 @@ class Agente(models.Model):
         return f'Agente: {self.nombre or self.usuario.username}'
 
 
-# =========================================================
-# 2.5. ANFITRIONES
-# =========================================================
 class Anfitrion(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='anfitrion')
     nombre = models.CharField(max_length=150, blank=True)
@@ -84,7 +73,6 @@ class Anfitrion(models.Model):
         verbose_name_plural = 'Anfitriones'
 
     def save(self, *args, **kwargs):
-        # Copia el nombre del usuario para que se vea directo en la tabla
         if not self.nombre and self.usuario_id:
             self.nombre = self.usuario.first_name or self.usuario.username
         super().save(*args, **kwargs)
@@ -93,9 +81,6 @@ class Anfitrion(models.Model):
         return f'Anfitrión: {self.nombre or self.usuario.username}'
 
 
-# =========================================================
-# 3. PROPIEDADES
-# =========================================================
 class Propiedad(models.Model):
     TIPO_PROPIEDAD = (
         ('casa', 'Casa'),
@@ -150,12 +135,9 @@ class Propiedad(models.Model):
         return round(promedio, 2) if promedio else None
 
 
-# =========================================================
-# 4. FOTOS_PROPIEDAD
-# =========================================================
 class FotoPropiedad(models.Model):
     propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='fotos')
-    url_foto = models.ImageField(upload_to='propiedades/')  # Puedes cambiar a URLField si usas enlaces externos
+    url_foto = models.ImageField(upload_to='propiedades/')
     es_principal = models.BooleanField(default=False)
 
     class Meta:
@@ -166,9 +148,6 @@ class FotoPropiedad(models.Model):
         return f'Foto de {self.propiedad.titulo}'
 
 
-# =========================================================
-# 5. AMENIDADES
-# =========================================================
 class Amenidad(models.Model):
     CATEGORIAS = (
         ('basica', 'Básica'),
@@ -186,9 +165,6 @@ class Amenidad(models.Model):
         return self.nombre
 
 
-# =========================================================
-# 6. PROPIEDAD_AMENIDADES (N:M)
-# =========================================================
 class PropiedadAmenidad(models.Model):
     propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE)
     amenidad = models.ForeignKey(Amenidad, on_delete=models.CASCADE)
@@ -202,9 +178,6 @@ class PropiedadAmenidad(models.Model):
         return f'{self.propiedad.titulo} - {self.amenidad.nombre}'
 
 
-# =========================================================
-# 7. DISPONIBILIDAD
-# =========================================================
 class Disponibilidad(models.Model):
     propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='disponibilidades')
     fecha = models.DateField()
@@ -220,9 +193,6 @@ class Disponibilidad(models.Model):
         return f'{self.propiedad.titulo} - {self.fecha} {"(Disponible)" if self.disponible else "(Ocupado)"}'
 
 
-# =========================================================
-# 8. RESERVAS_HOSPEDAJE
-# =========================================================
 class ReservaHospedaje(models.Model):
     ESTADOS = (
         ('pendiente', 'Pendiente'),
@@ -254,9 +224,6 @@ class ReservaHospedaje(models.Model):
         return f'Reserva de {self.huesped.username} en {self.propiedad.titulo}'
 
 
-# =========================================================
-# 9. CONTRATOS_ARRIENDO
-# =========================================================
 class ContratoArriendo(models.Model):
     ESTADOS = (
         ('borrador', 'Borrador'),
@@ -282,9 +249,6 @@ class ContratoArriendo(models.Model):
         return f'Contrato {self.propiedad.titulo} - {self.arrendatario.username}'
 
 
-# =========================================================
-# 10. PROCESO_VENTA
-# =========================================================
 class ProcesoVenta(models.Model):
     ESTADOS = (
         ('oferta', 'Oferta'),
@@ -311,9 +275,6 @@ class ProcesoVenta(models.Model):
         return f'Venta de {self.propiedad.titulo} - {self.estado}'
 
 
-# =========================================================
-# 11. OFERTAS_COMPRA
-# =========================================================
 class OfertaCompra(models.Model):
     ESTADOS = (
         ('enviada', 'Enviada'),
@@ -336,9 +297,6 @@ class OfertaCompra(models.Model):
         return f'Oferta de {self.comprador.username} - ${self.monto_oferta}'
 
 
-# =========================================================
-# 12. DOCUMENTOS (referencia polimórfica)
-# =========================================================
 class Documento(models.Model):
     TIPO_REFERENCIA = (
         ('venta', 'Venta'),
@@ -365,9 +323,6 @@ class Documento(models.Model):
         return f'{self.get_tipo_doc_display()} - {self.get_tipo_referencia_display()} #{self.id_referencia}'
 
 
-# =========================================================
-# 13. PAGOS (referencia polimórfica)
-# =========================================================
 class Pago(models.Model):
     TIPO_REFERENCIA = (
         ('reserva', 'Reserva'),
@@ -402,13 +357,10 @@ class Pago(models.Model):
         return f'Pago {self.get_concepto_display()} - ${self.monto} ({self.estado})'
 
 
-# =========================================================
-# 14. RESEÑAS
-# =========================================================
 class Resena(models.Model):
     propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='resenas')
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='resenas_escritas')
-    id_referencia = models.PositiveIntegerField()  # FK a Reserva o Contrato
+    id_referencia = models.PositiveIntegerField()
     tipo_referencia = models.CharField(max_length=20, choices=(('reserva', 'Reserva'), ('arriendo', 'Arriendo')))
     calificacion = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comentario = models.TextField(blank=True)
@@ -433,7 +385,7 @@ class Resena(models.Model):
         class Meta:
             verbose_name = 'Favorito'
             verbose_name_plural = 'Favoritos'
-            unique_together = ('usuario', 'propiedad')  # Un usuario no puede guardar la misma propiedad dos veces
+            unique_together = ('usuario', 'propiedad')
 
         def __str__(self):
             return f'{self.usuario.username} -> {self.propiedad.titulo}'
