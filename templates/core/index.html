@@ -72,7 +72,7 @@
       <span class="tab-label">Todas</span>
       <span class="tab-detail">sin filtro</span>
     </a>
-    <a href="?{% query_transform modalidad='hospedaje' %}" class="tab-ticket {% if modalidad_actual == 'hospedaje' %}is-active{% endif %}">
+    <a href="?{% query_transform modalidad='hospedaje_corto' %}" class="tab-ticket {% if modalidad_actual == 'hospedaje_corto' %}is-active{% endif %}">
       <span class="tab-index">01</span>
       <span class="tab-label">Hospedaje</span>
       <span class="tab-detail">por noche</span>
@@ -108,7 +108,7 @@
       <article class="property-card">
         <div class="card-media {% cycle 'media-a' 'media-b' 'media-c' 'media-d' 'media-e' 'media-f' %}">
           {% with foto=propiedad.foto_principal %}
-            {% if foto %}<img src="{{ foto.imagen.url }}" alt="{{ propiedad.titulo }}">{% endif %}
+            {% if foto %}<img src="{{ foto.url_foto.url }}" alt="{{ propiedad.titulo }}">{% endif %}
           {% endwith %}
           <span class="badge badge-{{ propiedad.modalidad }}">{{ propiedad.get_modalidad_display }}</span>
           <button class="fav-btn" type="button" data-propiedad-id="{{ propiedad.id }}" aria-label="Guardar en favoritos">
@@ -119,7 +119,7 @@
         </div>
         <div class="card-body">
           <div class="card-title-row">
-            <h3>{{ propiedad.titulo }}</h3>
+            <h3><a href="{% url 'core:detalle_propiedad' propiedad.id %}" style="text-decoration:none; color:inherit;">{{ propiedad.titulo }}</a></h3>
             {% if propiedad.calificacion_promedio %}
               <span class="rating"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z"/></svg>{{ propiedad.calificacion_promedio }}</span>
             {% else %}
@@ -132,6 +132,7 @@
             {% if propiedad.habitaciones %} · {{ propiedad.habitaciones }} habitaciones{% endif %}
           </p>
           <p class="card-price"><span class="price">${{ propiedad.precio|floatformat:0 }}</span> {{ propiedad.get_unidad_precio_display }}</p>
+          <a href="{% url 'core:detalle_propiedad' propiedad.id %}" class="ver-detalle">Ver detalles y reservar →</a>
         </div>
       </article>
       {% empty %}

@@ -1,0 +1,92 @@
+{% extends "core/base.html" %}
+
+{% block title %}Panel de administración — Estancia{% endblock %}
+
+{% block content %}
+<section class="hero-small wrap">
+  <h1 class="page-title">Panel de administración</h1>
+  <p class="page-sub">Gestiona todas las propiedades y usuarios de la plataforma.</p>
+</section>
+
+<section class="wrap admin-panel">
+
+  <h2 class="admin-heading">Propiedades ({{ propiedades.count }})</h2>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr><th>Título</th><th>Ciudad</th><th>Dueño</th><th>Modalidad</th><th>Precio</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        {% for propiedad in propiedades %}
+        <tr>
+          <td>{{ propiedad.titulo }}</td>
+          <td>{{ propiedad.ciudad }}</td>
+          <td>{{ propiedad.propietario.username }}</td>
+          <td>{{ propiedad.get_modalidad_display }}</td>
+          <td>${{ propiedad.precio|floatformat:0 }}</td>
+          <td class="admin-actions">
+            <a href="{% url 'core:editar_propiedad' propiedad.id %}" class="btn-mini">Editar</a>
+            <form action="{% url 'core:eliminar_propiedad' propiedad.id %}" method="post" onsubmit="return confirm('¿Eliminar la propiedad &quot;{{ propiedad.titulo }}&quot;?');" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn-mini btn-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No hay propiedades registradas.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="admin-heading" style="margin-top:40px;">Usuarios ({{ usuarios.count }})</h2>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr><th>Usuario</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.first_name }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.get_rol_display }}</td>
+          <td class="admin-actions">
+            {% if u.id == request.user.id %}
+              <span class="tag-yo">Tú</span>
+            {% elif u.is_superuser %}
+              <span class="tag-admin">Administrador</span>
+            {% else %}
+              <form action="{% url 'core:eliminar_usuario' u.id %}" method="post" onsubmit="return confirm('¿Eliminar al usuario &quot;{{ u.username }}&quot;? Esto también borra sus propiedades.');" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-mini btn-danger">Eliminar</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<style>
+  .hero-small { padding: 40px 0 20px; }
+  .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 600; margin: 0; }
+  .page-sub { font-size: 16px; color: var(--ink-soft); margin: 6px 0 0; }
+  .admin-panel { padding-bottom: 60px; }
+  .admin-heading { font-family: var(--font-display); font-size: 22px; margin: 0 0 14px; }
+  .admin-table-wrap { overflow-x: auto; border: 1px solid #e6e6e6; border-radius: 12px; }
+  .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .admin-table th, .admin-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #efefef; }
+  .admin-table th { background: #fafafa; font-weight: 600; }
+  .admin-table tr:last-child td { border-bottom: none; }
+  .admin-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-mini { display: inline-block; padding: 6px 12px; border-radius: 8px; font-size: 13px; text-decoration: none; border: 1px solid #ccc; background: #fff; color: #333; cursor: pointer; }
+  .btn-danger { border-color: #e0b4b4; background: #fdeaea; color: #b02a2a; }
+  .btn-danger:hover { background: #f8d7d7; }
+  .tag-yo, .tag-admin { font-size: 12px; color: #888; font-style: italic; }
+</style>
+{% endblock %}

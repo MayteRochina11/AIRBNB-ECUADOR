@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+
+{% block title %}Editar propiedad — Estancia{% endblock %}
+
+{% block content %}
+<section class="auth-section wrap">
+  <div class="auth-card form-card">
+    <h1 class="auth-title">Editar propiedad</h1>
+    <p class="auth-sub">Modifica los datos de "{{ propiedad.titulo }}".</p>
+
+    {% if propiedad.fotos.exists %}
+    <div class="fotos-actuales" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+      {% for foto in propiedad.fotos.all %}
+        <img src="{{ foto.url_foto.url }}" alt="Foto actual" style="width:110px; height:80px; object-fit:cover; border-radius:8px;">
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <div class="form-grid">
+        {% for field in form %}
+          <div class="field-group {% if field.name == 'titulo' or field.name == 'descripcion' %}span-2{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+        <div class="field-group span-2">
+          <label for="fotos">Agregar más fotos</label>
+          <input type="file" id="fotos" name="fotos" accept="image/*" multiple class="field-input">
+          <p class="field-help">Las fotos actuales se mantienen. Aquí solo agregas nuevas.</p>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Guardar cambios</button>
+      <a href="{% url 'core:mis_propiedades' %}" style="margin-left:12px;">Cancelar</a>
+    </form>
+  </div>
+</section>
+{% endblock %}

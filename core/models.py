@@ -206,6 +206,13 @@ class ReservaHospedaje(models.Model):
     precio_total = models.DecimalField(max_digits=12, decimal_places=2)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
     tipo_alojamiento = models.CharField(max_length=20, choices=(('hospedaje', 'Hospedaje'), ('cabana', 'Cabaña')), blank=True, null=True)
+    METODOS_PAGO = (
+        ('tarjeta', 'Tarjeta de crédito/débito'),
+        ('transferencia', 'Transferencia bancaria'),
+        ('efectivo', 'Efectivo'),
+    )
+    metodo_pago = models.CharField(max_length=20, choices=METODOS_PAGO, blank=True, null=True)
+    fecha_reserva = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Reserva de hospedaje'

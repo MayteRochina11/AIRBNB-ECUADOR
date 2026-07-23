@@ -34,7 +34,13 @@
 
     <div class="header-actions">
       {% if user.is_authenticated %}
+        {% if user.rol == 'host' or user.rol == 'agente' or user.is_staff %}
         <a href="{% url 'core:publicar' %}" class="link-publish">Publica tu propiedad</a>
+        <a href="{% url 'core:mis_propiedades' %}" class="link-publish">Mis propiedades</a>
+        {% endif %}
+        {% if user.is_staff %}
+        <a href="{% url 'core:panel_admin' %}" class="link-publish">Panel admin</a>
+        {% endif %}
         <span class="user-pill">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
           <span class="user-name">{{ user.username }}</span>

@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 
 from .forms import PropiedadForm, RegistroForm
-from .models import FotoPropiedad, Propiedad
+from .models import FotoPropiedad, Propiedad, Usuario
 from django.apps import apps
 Favorito = apps.get_model('core', 'Favorito')
 
@@ -52,8 +52,19 @@ def registro(request):
     return render(request, 'core/registro.html', {'form': form})
 
 
+def _puede_publicar(usuario):
+    """Solo anfitriones, agentes y administradores pueden publicar propiedades."""
+    if usuario.is_staff or usuario.is_superuser:
+        return True
+    return usuario.rol in ('host', 'agente')
+
+
 @login_required
 def publicar_propiedad(request):
+    if not _puede_publicar(request.user):
+        messages.error(request, 'Como viajero solo puedes reservar propiedades, no publicarlas. Cambia tu rol a Anfitrión o Agente para publicar.')
+        return redirect('core:inicio')
+
     if request.method == 'POST':
         form = PropiedadForm(request.POST)
         if form.is_valid():
@@ -120,6 +131,161 @@ def confianza(request):
 
 def contacto(request):
     return render(request, 'core/contacto.html')
+
+
+@login_required
+def detalle_propiedad(request, propiedad_id):
+    from .forms import ReservaForm
+    propiedad = get_object_or_404(
+        Propiedad.objects.select_related('propietario', 'agente__usuario'),
+        id=propiedad_id,
+    )
+    resenas = propiedad.resenas.select_related('autor')
+
+    reserva = None
+    form = ReservaForm()
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, 'Debes iniciar sesión para reservar.')
+            return redirect('core:login')
+
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            reserva.propiedad = propiedad
+            reserva.huesped = request.user
+
+            # Calcula el total según la unidad de precio de la propiedad
+            dias = (reserva.fecha_salida - reserva.fecha_entrada).days
+            if propiedad.unidad_precio == 'noche':
+                unidades = max(dias, 1)
+            elif propiedad.unidad_precio == 'mes':
+                unidades = max(round(dias / 30), 1)
+            else:  # total (venta)
+                unidades = 1
+            reserva.precio_total = propiedad.precio * unidades
+            reserva.save()
+
+            messages.success(
+                request,
+                f'¡Reserva realizada! Total a pagar: ${reserva.precio_total} '
+                f'({reserva.get_metodo_pago_display}). Estado: pendiente de confirmación.'
+            )
+            return redirect('core:detalle_propiedad', propiedad_id=propiedad.id)
+
+    return render(request, 'core/detalle_propiedad.html', {
+        'propiedad': propiedad,
+        'resenas': resenas,
+        'form': form,
+    })
+
+
+def _puede_editar(usuario, propiedad):
+    """Puede editar/eliminar si es el dueño, el agente asignado o un administrador."""
+    if usuario.is_staff or usuario.is_superuser:
+        return True
+    if propiedad.propietario_id == usuario.id:
+        return True
+    if propiedad.agente and propiedad.agente.usuario_id == usuario.id:
+        return True
+    return False
+
+
+@login_required
+def mis_propiedades(request):
+    from django.db.models import Q
+    propiedades = Propiedad.objects.filter(
+        Q(propietario=request.user) | Q(agente__usuario=request.user)
+    ).distinct().prefetch_related('fotos')
+    return render(request, 'core/mis_propiedades.html', {'propiedades': propiedades})
+
+
+@login_required
+def editar_propiedad(request, propiedad_id):
+    propiedad = get_object_or_404(Propiedad, id=propiedad_id)
+
+    if not _puede_editar(request.user, propiedad):
+        messages.error(request, 'No puedes editar una propiedad que no es tuya.')
+        return redirect('core:mis_propiedades')
+
+    if request.method == 'POST':
+        form = PropiedadForm(request.POST, instance=propiedad)
+        if form.is_valid():
+            form.save()
+
+            fotos = request.FILES.getlist('fotos')
+            for i, foto in enumerate(fotos):
+                FotoPropiedad.objects.create(
+                    propiedad=propiedad,
+                    url_foto=foto,
+                    es_principal=(i == 0 and not propiedad.fotos.exists()),
+                )
+
+            messages.success(request, '¡Propiedad actualizada con éxito!')
+            return redirect('core:mis_propiedades')
+    else:
+        form = PropiedadForm(instance=propiedad)
+
+    return render(request, 'core/editar_propiedad.html', {'form': form, 'propiedad': propiedad})
+
+
+@login_required
+def eliminar_propiedad(request, propiedad_id):
+    propiedad = get_object_or_404(Propiedad, id=propiedad_id)
+
+    if not _puede_editar(request.user, propiedad):
+        messages.error(request, 'No puedes eliminar una propiedad que no es tuya.')
+        return redirect('core:mis_propiedades')
+
+    if request.method == 'POST':
+        titulo = propiedad.titulo
+        propiedad.delete()
+        messages.success(request, f'La propiedad "{titulo}" fue eliminada.')
+        # El admin vuelve a su panel; el resto a sus propiedades
+        if request.user.is_staff or request.user.is_superuser:
+            return redirect('core:panel_admin')
+        return redirect('core:mis_propiedades')
+
+    return redirect('core:mis_propiedades')
+
+
+def _es_admin(usuario):
+    return usuario.is_staff or usuario.is_superuser
+
+
+@login_required
+def panel_admin(request):
+    if not _es_admin(request.user):
+        messages.error(request, 'No tienes permiso para acceder al panel de administración.')
+        return redirect('core:inicio')
+
+    propiedades = Propiedad.objects.all().select_related('propietario').prefetch_related('fotos')
+    usuarios = Usuario.objects.all().order_by('rol', 'username')
+    return render(request, 'core/panel_admin.html', {
+        'propiedades': propiedades,
+        'usuarios': usuarios,
+    })
+
+
+@login_required
+def eliminar_usuario(request, usuario_id):
+    if not _es_admin(request.user):
+        messages.error(request, 'No tienes permiso para eliminar usuarios.')
+        return redirect('core:inicio')
+
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
+    if request.method == 'POST':
+        if usuario.id == request.user.id:
+            messages.error(request, 'No puedes eliminar tu propia cuenta desde aquí.')
+        elif usuario.is_superuser:
+            messages.error(request, 'No se puede eliminar a otro administrador.')
+        else:
+            nombre = usuario.username
+            usuario.delete()
+            messages.success(request, f'El usuario "{nombre}" fue eliminado.')
+    return redirect('core:panel_admin')
 
 
 @login_required
