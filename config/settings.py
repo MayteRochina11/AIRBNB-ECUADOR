@@ -2,6 +2,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Carga las variables de entorno definidas en el archivo .env
@@ -64,9 +66,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'bd_airbnb'),
+        'NAME': os.environ.get('DB_NAME', 'BD_AIRBNB'),
         'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
